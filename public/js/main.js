@@ -74,6 +74,7 @@ let svgButton = d3.select("body").append("button")
     forceGraph = new module.ForceSimulationGraphSVG("app", "view", width, height);
     await forceGraph.loadProperties();
     forceGraph.add(nodes, links);
+    d3.selectAll("input").on("change", updateParameter);
   });
 
 function updateParameter(){

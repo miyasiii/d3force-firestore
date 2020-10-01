@@ -7,10 +7,10 @@ let links = [];
 let nodes = [];
 let forceGraph;
 
-const dummyItems = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-for(let i=0; i<dummyItems.length; i++){
-  nodes.push({id: dummyItems[i]});
-}
+// const dummyItems = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+// for(let i=0; i<dummyItems.length; i++){
+//   nodes.push({id: dummyItems[i]});
+// }
 // for(let i=0; i<500; i++){
 //   const src = dummyItems[Math.floor(dummyItems.length * Math.random())];
 //   const dst = dummyItems[Math.floor(dummyItems.length * Math.random())];
@@ -47,6 +47,7 @@ let canvasButton = d3.select("body").append("button")
     forceGraph.add(nodes, links);
     d3.selectAll("input").on("change", updateParameter);
     d3.select("#findButton").on("click", find);
+    d3.select("#linkButton").on("click", linkAnalize);
   });
 
 let svgButton = d3.select("body").append("button")
@@ -79,6 +80,7 @@ let svgButton = d3.select("body").append("button")
     forceGraph.add(nodes, links);
     d3.selectAll("input").on("change", updateParameter);
     d3.select("#findButton").on("click", find);
+    d3.select("#linkButton").on("click", linkAnalize);
   });
 
 function updateParameter(){
@@ -88,4 +90,8 @@ function updateParameter(){
 
 function find(){
   forceGraph.find();
+}
+
+function linkAnalize(){
+  forceGraph.linkAnalize();
 }

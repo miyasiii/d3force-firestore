@@ -34,4 +34,7 @@ export class ForceSimulationAnalizer{
     return this._find;
   }
 
+  set find(val){
+    this._find = val;
+  }
 }

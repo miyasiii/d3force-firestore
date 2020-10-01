@@ -1,6 +1,10 @@
 export class ForceSimulationGraphCanvas{
   constructor(parentId, elementId, width, height) {
+    this.colorScale = d3.scaleSequential(d3.interpolateRainbow).domain([0, 1000]);
+    // this.colorScale = d3.scaleSequential(d3.interpolateRainbow).domain([-180, 180]);
+    // this.colorScale = d3.scaleSequential(d3.interpolateRainbow).domain([-2*Math.PI, 2*Math.PI]);
     this.forceProperties;
+    this.forceAnalizers;
     this.parentId = parentId;
     this.elementId = elementId;
     this.width = width;
@@ -78,6 +82,11 @@ export class ForceSimulationGraphCanvas{
     this.forceProperties = new module.ForceSimulationParameter();
   }
 
+  async loadAnalizers() {
+    const module = await import('./ForceSimulationAnalizer.js');
+    this.forceAnalizers = new module.ForceSimulationAnalizer();
+  }
+
   add(nodesToAdd, linksToAdd){
     if (nodesToAdd) {
       for(let n=0; n<nodesToAdd.length; n++){
@@ -147,21 +156,31 @@ export class ForceSimulationGraphCanvas{
     this.context.globalAlpha = 0.5;
     this.transform.k <= 1.0 ? this.context.lineWidth = this.transform.k : this.context.lineWidth = 1/this.transform.k
     
-    this.context.strokeStyle = "rgb(125,193,222)";
-    this.context.beginPath();
     for(let i=0; i<this.graphData.links.length; i++){
+      if("selected" in this.graphData.links[i]){
+        this.context.lineWidth = 3;
+        this.context.strokeStyle = "rgb(255,0,0)";
+      }else if("selectedSecond" in this.graphData.links[i]){
+        this.context.lineWidth = 2;
+        this.context.strokeStyle = "rgb(255,165,0)";
+      }else{
+        this.context.lineWidth = 1;
+        this.context.strokeStyle = "rgb(125,193,222)";
+      }
+      this.context.beginPath();
       this.context.moveTo(this.graphData.links[i].source.x, this.graphData.links[i].source.y);
       this.context.lineTo(this.graphData.links[i].target.x, this.graphData.links[i].target.y);
-    }
-    this.context.stroke();
-    
-    this.context.strokeStyle = "rgb(78, 166, 204)";
-    for(let i=0; i<this.graphData.nodes.length; i++){
-      this.context.fillStyle = d3.interpolateMagma(Math.sqrt(this.graphData.nodes[i].vx*this.graphData.nodes[i].vx + this.graphData.nodes[i].vy*this.graphData.nodes[i].vy)/3);
-      this.context.beginPath();
-      this.context.arc(this.graphData.nodes[i].x, this.graphData.nodes[i].y, 5, 0, 2 * Math.PI, true);
-      this.context.fill();
       this.context.stroke();
+    }
+    
+    if(1.0 <= this.transform.k){
+      for(let i=0; i<this.graphData.nodes.length; i++){
+        this.context.fillStyle = d3.interpolateMagma(Math.sqrt(this.graphData.nodes[i].vx*this.graphData.nodes[i].vx + this.graphData.nodes[i].vy*this.graphData.nodes[i].vy)/3);
+        this.context.beginPath();
+        this.context.arc(this.graphData.nodes[i].x, this.graphData.nodes[i].y, 5, 0, 2 * Math.PI, true);
+        this.context.fill();
+        this.context.stroke();
+      }
     }
 
     if(1.5 <= this.transform.k){
@@ -177,5 +196,35 @@ export class ForceSimulationGraphCanvas{
 
   restart(alpha){
     this.forceSimulation.alphaTarget(alpha).restart();
+  }
+
+  find(){
+    let nodeId = this.forceAnalizers.find.text;
+    let secondDegree = [];
+
+    for(let i=0; i<this.graphData.links.length; i++){
+      if(this.graphData.links[i].source.id === nodeId){
+        this.graphData.links[i].selected = true;
+        secondDegree.push(this.graphData.links[i].target.id);
+      }
+      else if(this.graphData.links[i].target.id === nodeId){
+        this.graphData.links[i].selected = true;
+        secondDegree.push(this.graphData.links[i].source.id);
+      }else{
+        delete this.graphData.links[i].selected;
+        delete this.graphData.links[i].selectedSecond;
+      }
+    }
+
+    for(let i=0; i<secondDegree.length; i++){
+      for(let j=0; j<this.graphData.links.length; j++){
+        if(this.graphData.links[j].source.id === secondDegree[i]){
+          this.graphData.links[j].selectedSecond = true;
+        }
+        else if(this.graphData.links[j].target.id === secondDegree[i]){
+          this.graphData.links[j].selectedSecond = true;
+        }
+      }
+    }
   }
 }

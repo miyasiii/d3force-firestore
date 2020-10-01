@@ -43,8 +43,10 @@ let canvasButton = d3.select("body").append("button")
     const module = await import('./ForceSimulationGraphCanvas.js');
     forceGraph = new module.ForceSimulationGraphCanvas("app", "view", width, height);
     await forceGraph.loadProperties();
+    await forceGraph.loadAnalizers();
     forceGraph.add(nodes, links);
     d3.selectAll("input").on("change", updateParameter);
+    d3.select("#findButton").on("click", find);
   });
 
 let svgButton = d3.select("body").append("button")
@@ -73,11 +75,17 @@ let svgButton = d3.select("body").append("button")
     const module = await import('./ForceSimulationGraphSVG.js');
     forceGraph = new module.ForceSimulationGraphSVG("app", "view", width, height);
     await forceGraph.loadProperties();
+    await forceGraph.loadAnalizers();
     forceGraph.add(nodes, links);
     d3.selectAll("input").on("change", updateParameter);
+    d3.select("#findButton").on("click", find);
   });
 
 function updateParameter(){
   forceGraph.update();
   forceGraph.restart(0.3);
+}
+
+function find(){
+  forceGraph.find();
 }

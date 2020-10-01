@@ -30,7 +30,24 @@ body {
   pointer-events: none;
 }
 
+#forceAnalizers {
+  flex-basis: 180px;
+  padding: 0px;
+  z-index: 1;
+  pointer-events: none;
+}
+
 .force {
+  background-color: #eee;
+  border-radius: 3px;
+  padding: 2px;
+  margin: 3px;
+  pointer-events: auto;
+  font: monospace;
+  font-size: small;
+}
+
+.analize {
   background-color: #eee;
   border-radius: 3px;
   padding: 2px;
@@ -48,6 +65,10 @@ body {
   opacity: 0.7;
   transition: opacity .2s;
 }
+
+.range:hover { opacity: 1; }
+.range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 15px; height: 10px; background: #4CAF50; cursor: pointer; }
+.range::-moz-range-thumb { width: 15px; height: 10px; background: #4CAF50; cursor: pointer; }
 
 .range:hover { opacity: 1; }
 .range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 15px; height: 10px; background: #4CAF50; cursor: pointer; }

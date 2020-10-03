@@ -10,6 +10,7 @@ export class ForceSimulationGraphCanvas{
     this.elementId = elementId;
     this.width = width;
     this.height = height;
+    this.fontSize = 10;
     this.graphData = { "nodes": [], "links": [] };
     this.transform = d3.zoomIdentity;
     this.graphElement = d3.select("#"+parentId)
@@ -192,10 +193,15 @@ export class ForceSimulationGraphCanvas{
     }
 
     if(1.5 <= this.transform.k){
-      this.context.fillStyle = "black";
-      this.context.font = "10px sans-serif";
+      this.context.fillStyle = "white";
+      this.context.font = `${this.fontSize}px sans-serif`;
+      this.context.scale(1/this.transform.k, 1/this.transform.k);
       for(let i=0; i<this.graphData.nodes.length; i++){
-        this.context.fillText(this.graphData.nodes[i].id, this.graphData.nodes[i].x, this.graphData.nodes[i].y);
+        this.context.fillText(
+          this.graphData.nodes[i].id,
+          this.graphData.nodes[i].x * this.transform.k - this.fontSize * 0.5,
+          this.graphData.nodes[i].y * this.transform.k + this.fontSize * 0.5
+        );
       }
     }
 

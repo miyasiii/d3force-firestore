@@ -27,19 +27,7 @@ let canvasButton = d3.select("body").append("button")
     canvasButton.remove();
     svgButton.remove();
 
-    const [ linkDocs, nodeDocs ] = await Promise.all([
-      docLinksRef.get().then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-          links.push({source: doc.data().source, target: doc.data().target});
-        });
-      }),
-      docNodesRef.get().then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-          nodes.push({id: doc.id});
-        });
-      })
-    ])
-
+    await constructGraphData();
     const module = await import('./ForceSimulationGraphCanvas.js');
     forceGraph = new module.ForceSimulationGraphCanvas("app", "view", width, height);
     await forceGraph.loadProperties();
@@ -60,19 +48,7 @@ let svgButton = d3.select("body").append("button")
     canvasButton.remove();
     svgButton.remove();
 
-    const [ linkDocs, nodeDocs ] = await Promise.all([
-      docLinksRef.get().then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-          links.push({source: doc.data().source, target: doc.data().target});
-        });
-      }),
-      docNodesRef.get().then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-          nodes.push({id: doc.id});
-        });
-      })
-    ])
-
+    await constructGraphData();
     const module = await import('./ForceSimulationGraphSVG.js');
     forceGraph = new module.ForceSimulationGraphSVG("app", "view", width, height);
     await forceGraph.loadProperties();
@@ -82,6 +58,21 @@ let svgButton = d3.select("body").append("button")
     d3.select("#findButton").on("click", find);
     d3.select("#linkButton").on("click", linkAnalize);
   });
+
+async function constructGraphData(){
+  const [ linkDocs, nodeDocs ] = await Promise.all([
+    docLinksRef.get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        links.push({source: doc.data().source, target: doc.data().target});
+      });
+    }),
+    docNodesRef.get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        nodes.push({id: doc.id});
+      });
+    })
+  ])
+}
 
 function updateParameter(){
   forceGraph.update();

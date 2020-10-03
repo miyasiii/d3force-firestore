@@ -256,7 +256,9 @@ export class ForceSimulationParameter{
       strength: d3.select("#manyBodyStrengthValue").property("value"),
       theta: d3.select("#manyBodyThetahValue").property("value"),
       distanceMin: d3.select("#manyBodyDistanceMinValue").property("value"),
-      distanceMax: d3.select("#manyBodyDistanceMaxValue").property("value") === "2000" ? Infinity : d3.select("#manyBodyDistanceMaxValue").property("value")
+      distanceMax: d3.select("#manyBodyDistanceMaxValue").property("value") === "2000" ?
+        Infinity : d3.select("#manyBodyDistanceMaxValue").property("value") === "1000" ?
+        Infinity : d3.select("#manyBodyDistanceMaxValue").property("value")
     }
 
     this.x = {

@@ -191,6 +191,7 @@ export class ForceSimulationGraphSVG{
   }
 
   restart(alpha){
-    this.forceSimulation.alphaTarget(alpha).restart();
+    this.forceSimulation.restart();
+    this.forceSimulation.alpha(alpha);
   }
 }

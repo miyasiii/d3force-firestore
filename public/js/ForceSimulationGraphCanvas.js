@@ -6,6 +6,7 @@ export class ForceSimulationGraphCanvas{
     this.linkColorScale = null;
     this.forceProperties;
     this.forceAnalizers;
+    this.forceAlpha;
     this.parentId = parentId;
     this.elementId = elementId;
     this.width = width;
@@ -89,6 +90,11 @@ export class ForceSimulationGraphCanvas{
     this.forceAnalizers = new module.ForceSimulationAnalizer();
   }
 
+  async loadAlphaBar() {
+    const module = await import('./ForceSimulationAlphaBar.js');
+    this.forceAlpha = new module.ForceSimulationAlphaBar();
+  }
+
   add(nodesToAdd, linksToAdd){
     if (nodesToAdd) {
       for(let n=0; n<nodesToAdd.length; n++){
@@ -148,9 +154,12 @@ export class ForceSimulationGraphCanvas{
       .force("link").distance(this.forceProperties.link.distance).iterations(this.forceProperties.link.iterations).links(links)
 
     this.forceSimulation.on("tick", () => this.render());
+    this.forceSimulation.on("end", () => this.tickEnded());
   }
 
   render(){
+    this.forceAlpha.update(this.forceSimulation.alpha());
+    
     this.context.save();
     this.context.clearRect(0, 0, this.width, this.height);
     this.context.translate(this.transform.x, this.transform.y);
@@ -206,6 +215,10 @@ export class ForceSimulationGraphCanvas{
     }
 
     this.context.restore();
+  }
+
+  tickEnded(){
+    this.forceAlpha.update(0.0);
   }
 
   restart(alpha){

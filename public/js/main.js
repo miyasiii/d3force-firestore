@@ -30,6 +30,7 @@ let canvasButton = d3.select("body").append("button")
     await constructGraphData();
     const module = await import('./ForceSimulationGraphCanvas.js');
     forceGraph = new module.ForceSimulationGraphCanvas("app", "view", width, height);
+    await forceGraph.loadAlphaBar();
     await forceGraph.loadProperties();
     await forceGraph.loadAnalizers();
     forceGraph.add(nodes, links);
@@ -51,6 +52,7 @@ let svgButton = d3.select("body").append("button")
     await constructGraphData();
     const module = await import('./ForceSimulationGraphSVG.js');
     forceGraph = new module.ForceSimulationGraphSVG("app", "view", width, height);
+    await forceGraph.loadAlphaBar();
     await forceGraph.loadProperties();
     await forceGraph.loadAnalizers();
     forceGraph.add(nodes, links);

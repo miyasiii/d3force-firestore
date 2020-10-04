@@ -10,6 +10,8 @@ body {
   padding: 0;
   display: flex;
   overflow: hidden;
+  flex-wrap: wrap;
+  align-content: flex-start;
 }
 
 #app {
@@ -23,6 +25,28 @@ body {
 /*******************/
 /* parameters style*/
 /*******************/
+
+#forceAlpha {
+  flex-basis: 100%;
+  padding: 0px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+#forceAlphaBar {
+  height: .5em;
+  border: 1px #777 solid;
+  border-radius: 2px;
+  padding: 1px;
+  display: flex;
+}
+
+#forceAlphaValue {
+  background-color: #555;
+  border-radius: 1px;
+  flex-basis: 0%;
+}
+
 #forceParameters {
   flex-basis: 180px;
   padding: 0px;

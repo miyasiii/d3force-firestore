@@ -1,6 +1,7 @@
 export class ForceSimulationGraphSVG{
   constructor(parentId, elementId, width, height) {
     this.forceProperties;
+    this.forceAlpha;
     this.parentId = parentId;
     this.elementId = elementId;
     this.width = width;
@@ -94,6 +95,11 @@ export class ForceSimulationGraphSVG{
     this.forceProperties = new module.ForceSimulationParameter();
   }
 
+  async loadAlphaBar() {
+    const module = await import('./ForceSimulationAlphaBar.js');
+    this.forceAlpha = new module.ForceSimulationAlphaBar();
+  }
+
   add(nodesToAdd, linksToAdd){
     if (nodesToAdd) {
       for(let n=0; n<nodesToAdd.length; n++){
@@ -177,9 +183,12 @@ export class ForceSimulationGraphSVG{
     graphLinksData = graphLinksEnter.merge(graphLinksData);
 
     this.forceSimulation.on("tick", () => this.render(graphLinksData, graphNodesData));
+    this.forceSimulation.on("end", () => this.tickEnded());
   }
 
   render(graphLinksData, graphNodesData){
+    this.forceAlpha.update(this.forceSimulation.alpha());
+
     graphLinksData
       .attr("x1", d => d.source.x)
       .attr("y1", d => d.source.y)
@@ -188,6 +197,10 @@ export class ForceSimulationGraphSVG{
     graphNodesData
       .attr("transform", d => {return 'translate(' + [d.x, d.y] + ')';})
       .style("fill", d => {return d3.interpolateMagma(Math.sqrt(d.vx*d.vx + d.vy*d.vy)/3);})
+  }
+
+  tickEnded(){
+    this.forceAlpha.update(0.0);
   }
 
   restart(alpha){

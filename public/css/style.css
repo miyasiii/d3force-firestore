@@ -111,6 +111,14 @@ line {
   stroke-opacity: 0.5;
 }
 
+.selectedSecond{
+  stroke: rgb(255, 165, 0);
+}
+
+.selected{
+  stroke: rgb(255, 0, 0);
+}
+
 text {
   font: monospace;
 }

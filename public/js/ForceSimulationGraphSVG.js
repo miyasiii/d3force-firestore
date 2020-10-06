@@ -1,6 +1,7 @@
 export class ForceSimulationGraphSVG{
   constructor(parentId, elementId, width, height) {
     this.forceProperties;
+    this.forceAnalizers;
     this.forceAlpha;
     this.parentId = parentId;
     this.elementId = elementId;
@@ -93,6 +94,11 @@ export class ForceSimulationGraphSVG{
   async loadProperties() {
     const module = await import('./ForceSimulationParameter.js');
     this.forceProperties = new module.ForceSimulationParameter();
+  }
+
+  async loadAnalizers() {
+    const module = await import('./ForceSimulationAnalizer.js');
+    this.forceAnalizers = new module.ForceSimulationAnalizer();
   }
 
   async loadAlphaBar() {
@@ -206,5 +212,64 @@ export class ForceSimulationGraphSVG{
   restart(alpha){
     this.forceSimulation.restart();
     this.forceSimulation.alpha(alpha);
+  }
+
+  find(){
+    let nodeId = this.forceAnalizers.find.text;
+    let secondDegree = [];
+
+    for(let i=0; i<this.graphData.links.length; i++){
+      if(this.graphData.links[i].source.id === nodeId){
+        this.graphData.links[i].selected = true;
+        secondDegree.push(this.graphData.links[i].target.id);
+      }
+      else if(this.graphData.links[i].target.id === nodeId){
+        this.graphData.links[i].selected = true;
+        secondDegree.push(this.graphData.links[i].source.id);
+      }else{
+        delete this.graphData.links[i].selected;
+        delete this.graphData.links[i].selectedSecond;
+      }
+    }
+
+    for(let i=0; i<secondDegree.length; i++){
+      for(let j=0; j<this.graphData.links.length; j++){
+        if(this.graphData.links[j].source.id === secondDegree[i]){
+          this.graphData.links[j].selectedSecond = true;
+        }
+        else if(this.graphData.links[j].target.id === secondDegree[i]){
+          this.graphData.links[j].selectedSecond = true;
+        }
+      }
+    }
+
+    let links = d3.selectAll("line");
+    links.classed("selected", false);
+    links.classed("selectedSecond", false);
+
+    links.filter(function(d) {
+      if(d.source.id === nodeId){
+        secondDegree.push(d.target.id);
+        return true;
+      }
+      if(d.target.id === nodeId){
+        secondDegree.push(d.source.id);
+        return true;
+      }
+    }).classed("selected", true);
+
+    for(let i=0; i<secondDegree.length; i++){
+      links.filter(function(d) {
+        if(d.source.id === secondDegree[i]){
+          return true;
+        }
+        if(d.target.id === secondDegree[i]){
+          return true;
+        }
+      }).classed("selectedSecond", true);
+    }
+  }
+
+  linkAnalize(){
   }
 }

@@ -1,5 +1,6 @@
 export class ForceSimulationGraphSVG{
   constructor(parentId, elementId, width, height) {
+    this.linkColorScale = null;
     this.forceProperties;
     this.forceAnalizers;
     this.forceAlpha;
@@ -54,6 +55,12 @@ export class ForceSimulationGraphSVG{
         .attr("transform",
         `translate(${d3.event.transform.x}, ${d3.event.transform.y})` + " " +
         `scale(${d3.event.transform.k})`);
+
+        if(1.0 <= d3.event.transform.k){
+          d3.selectAll("circle").attr("display", null);
+        }else{
+          d3.selectAll("circle").attr("display", "none");
+        }
 
         if(1.5 <= d3.event.transform.k && this.detail === false){
           d3.selectAll("text").attr("display", null);
@@ -183,7 +190,9 @@ export class ForceSimulationGraphSVG{
     graphNodesData = graphNodesEnter.merge(graphNodesData);
 
     let graphLinksData = this.graphLinksGroup.selectAll("line").data(links);
-    let graphLinksEnter = graphLinksData.enter().append("line");
+    let graphLinksEnter = graphLinksData.enter().append("line")
+      .style("stroke", "black")
+      .style("stroke-opacity", 0.5);
 
     graphLinksData.exit().remove();
     graphLinksData = graphLinksEnter.merge(graphLinksData);
@@ -271,5 +280,117 @@ export class ForceSimulationGraphSVG{
   }
 
   linkAnalize(){
+    switch(this.forceAnalizers.link.colorScale){
+      case "interpolateBrBG":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateBrBG).domain([0, 1000]);
+        break;
+      case "interpolatePRGn":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolatePRGn).domain([0, 1000]);
+        break;
+      case "interpolatePiYG":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolatePiYG).domain([0, 1000]);
+        break;
+      case "interpolatePuOr":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolatePuOr).domain([0, 1000]);
+        break;
+      case "interpolateRdBu":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateRdBu).domain([0, 1000]);
+        break;
+      case "interpolateRdGy":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateRdGy).domain([0, 1000]);
+        break;
+      case "interpolateRdYlBu":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateRdYlBu).domain([0, 1000]);
+        break;
+      case "interpolateRdYlGn":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateRdYlGn).domain([0, 1000]);
+        break;
+      case "interpolateSpectral":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateSpectral).domain([0, 1000]);
+        break;
+      case "interpolateBlues":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateBlues).domain([0, 1000]);
+        break;
+      case "interpolateGreens":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateGreens).domain([0, 1000]);
+        break;
+      case "interpolateGreys":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateGreys).domain([0, 1000]);
+        break;
+      case "interpolateOranges":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateOranges).domain([0, 1000]);
+        break;
+      case "interpolatePurples":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolatePurples).domain([0, 1000]);
+        break;
+      case "interpolateReds":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateReds).domain([0, 1000]);
+        break;
+      case "interpolateViridis":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateViridis).domain([0, 1000]);
+        break;
+      case "interpolateInferno":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateInferno).domain([0, 1000]);
+        break;
+      case "interpolateMagma":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateMagma).domain([0, 1000]);
+        break;
+      case "interpolatePlasma":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolatePlasma).domain([0, 1000]);
+        break;
+      case "interpolateWarm":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateWarm).domain([0, 1000]);
+        break;
+      case "interpolateCool":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateCool).domain([0, 1000]);
+        break;
+      case "interpolateCubehelixDefault":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateCubehelixDefault).domain([0, 1000]);
+        break;
+      case "interpolateBuGn":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateBuGn).domain([0, 1000]);
+        break;
+      case "interpolateBuPu":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateBuPu).domain([0, 1000]);
+        break;
+      case "interpolateGnBu":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateGnBu).domain([0, 1000]);
+        break;
+      case "interpolateOrRd":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateOrRd).domain([0, 1000]);
+        break;
+      case "interpolatePuBuGn":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolatePuBuGn).domain([0, 1000]);
+        break;
+      case "interpolatePuBu":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolatePuBu).domain([0, 1000]);
+        break;
+      case "interpolatePuRd":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolatePuRd).domain([0, 1000]);
+        break;
+      case "interpolateRdPu":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateRdPu).domain([0, 1000]);
+        break;
+      case "interpolateYlGnBu":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateYlGnBu).domain([0, 1000]);
+        break;
+      case "interpolateYlGn":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateYlGn).domain([0, 1000]);
+        break;
+      case "interpolateYlOrBr":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateYlOrBr).domain([0, 1000]);
+        break;
+      case "interpolateYlOrRd":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateYlOrRd).domain([0, 1000]);
+        break;
+      case "interpolateRainbow":
+        this.linkColorScale =  d3.scaleSequential(d3.interpolateRainbow).domain([0, 1000]);
+        break;
+      default:
+        this.linkColorScale = null;
+        break;
+    }
+
+    d3.selectAll("line").style("stroke", d => this.linkColorScale(Math.sqrt(Math.pow(d.source.x - d.target.x, 2) + Math.pow(d.source.y - d.target.y, 2))));
   }
 }

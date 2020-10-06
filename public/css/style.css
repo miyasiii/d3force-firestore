@@ -106,11 +106,6 @@ body {
   fill: rgb(254, 254, 254);
 }
 
-line {
-  stroke: rgb(125,193,222);
-  stroke-opacity: 0.5;
-}
-
 .selectedSecond{
   stroke: rgb(255, 165, 0);
 }

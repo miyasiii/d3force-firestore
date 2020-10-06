@@ -37,6 +37,7 @@ let canvasButton = d3.select("body").append("button")
     d3.selectAll("input").on("change", updateParameter);
     d3.select("#findButton").on("click", find);
     d3.select("#linkButton").on("click", linkAnalize);
+    d3.select("#backgroundButton").on("click", backgroundAnalize);
   });
 
 let svgButton = d3.select("body").append("button")
@@ -59,6 +60,7 @@ let svgButton = d3.select("body").append("button")
     d3.selectAll("input").on("change", updateParameter);
     d3.select("#findButton").on("click", find);
     d3.select("#linkButton").on("click", linkAnalize);
+    d3.select("#backgroundButton").on("click", backgroundAnalize);
   });
 
 async function constructGraphData(){
@@ -87,4 +89,8 @@ function find(){
 
 function linkAnalize(){
   forceGraph.linkAnalize();
+}
+
+function backgroundAnalize(){
+  forceGraph.backgroundAnalize();
 }

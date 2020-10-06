@@ -162,11 +162,16 @@ export class ForceSimulationGraphCanvas{
     
     this.context.save();
     this.context.clearRect(0, 0, this.width, this.height);
+
+    this.context.fillStyle = this.forceAnalizers.background.color;
+    this.context.fillRect(0, 0, this.width, this.height);
+
     this.context.translate(this.transform.x, this.transform.y);
     this.context.scale(this.transform.k, this.transform.k);
+
     this.context.globalAlpha = 0.5;
     this.transform.k <= 1.0 ? this.context.lineWidth = this.transform.k : this.context.lineWidth = 1/this.transform.k
-    
+
     for(let i=0; i<this.graphData.links.length; i++){
       if(this.linkColorScale != null){
         if("selected" in this.graphData.links[i]){
@@ -367,6 +372,10 @@ export class ForceSimulationGraphCanvas{
         this.linkColorScale = null;
         break;
     }
+    this.render();
+  }
+
+  backgroundAnalize(){
     this.render();
   }
 }

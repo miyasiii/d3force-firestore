@@ -3,6 +3,9 @@ export class ForceSimulationAnalizer{
     this._find = {
       text: ""
     }
+    this._background = {
+      color: "white"
+    }
     this._link = {
       colorScale: "default"
     }
@@ -18,11 +21,23 @@ export class ForceSimulationAnalizer{
       .attr("value", this._find.text)
       .classed("text", true)
       .attr('id', "textValue")
-      .on("input", ()=>{this.update()});
+      .on("change", ()=>{this.update()});
     this.findDiv.append("input")
       .attr('type', "button")
       .attr("value", "find")
       .attr('id', "findButton")
+
+    this.backGroundDiv = this.analizerDiv.append("div").classed("analize", true);
+    this.backGroundDiv.append("div").style("text-align", "center").style("background-color", "#bbb").html("background");
+    this.backGroundDivSelect = this.backGroundDiv.append("select")
+      .attr('id', "backgroundValue")
+      .on("change", ()=>{this.update()});
+    this.backGroundDivSelect.append("option").attr("value", "white").html("white");
+    this.backGroundDivSelect.append("option").attr("value", "black").html("black");
+    this.backGroundDiv.append("input")
+      .attr('type', "button")
+      .attr("value", "apply")
+      .attr('id', "backgroundButton")
 
     this.linkDiv = this.analizerDiv.append("div").classed("analize", true);
     this.linkDiv.append("div").style("text-align", "center").style("background-color", "#bbb").html("link");
@@ -82,6 +97,10 @@ export class ForceSimulationAnalizer{
     this._link = {
       colorScale: d3.select("#linkValue").property("value")
     }
+
+    this._background = {
+      color: d3.select("#backgroundValue").property("value")
+    }
   }
 
   get find(){
@@ -98,5 +117,13 @@ export class ForceSimulationAnalizer{
 
   set link(val){
     this._link = val;
+  }
+
+  get background(){
+    return this._background;
+  }
+
+  set background(val){
+    this._background = val;
   }
 }

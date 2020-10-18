@@ -125,9 +125,9 @@ export class ForceSimulationGraphSVG{
       }
     }
 
-    this.update(this.graphNodesGroup, this.graphLinksGroup);
     this.forceSimulation.restart();
-    this.forceSimulation.alpha(1);
+    this.forceSimulation.alpha(0);
+    this.update(this.graphNodesGroup, this.graphLinksGroup);
   }
 
   remove(dToRemove){

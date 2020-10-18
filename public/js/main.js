@@ -1,6 +1,4 @@
-const firestore = firebase.firestore();
-const docLinksRef = firestore.collection("links");
-const docNodesRef = firestore.collection("nodes");
+const storage = firebase.storage();
 let width = document.body.clientWidth;
 let height = document.body.clientHeight;
 let links = [];
@@ -27,7 +25,7 @@ let canvasButton = d3.select("body").append("button")
     canvasButton.remove();
     svgButton.remove();
 
-    await constructGraphData();
+    await constructGraphDataStorage();
     const module = await import('./ForceSimulationGraphCanvas.js');
     forceGraph = new module.ForceSimulationGraphCanvas("app", "view", width, height);
     await forceGraph.loadAlphaBar();
@@ -50,7 +48,7 @@ let svgButton = d3.select("body").append("button")
     canvasButton.remove();
     svgButton.remove();
 
-    await constructGraphData();
+    await constructGraphDataStorage();
     const module = await import('./ForceSimulationGraphSVG.js');
     forceGraph = new module.ForceSimulationGraphSVG("app", "view", width, height);
     await forceGraph.loadAlphaBar();
@@ -63,17 +61,33 @@ let svgButton = d3.select("body").append("button")
     d3.select("#backgroundButton").on("click", backgroundAnalize);
   });
 
-async function constructGraphData(){
+async function constructGraphDataStorage(){
   const [ linkDocs, nodeDocs ] = await Promise.all([
-    docLinksRef.get().then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-        links.push({source: doc.data().source, target: doc.data().target});
-      });
+    storage.ref('links').getDownloadURL().then(async function(url){
+      await fetch(url).then(function(response){
+        if (response.ok) {
+          return response.json();
+        } else {
+          return Promise.reject(new Error('error request'));
+        }
+      }).then(function(json){
+        links = links.concat(json);
+      }).catch(function(e){
+        console.log(e.message);
+      })
     }),
-    docNodesRef.get().then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-        nodes.push({id: doc.id});
-      });
+    storage.ref('nodes').getDownloadURL().then(async function(url){
+      await fetch(url).then(async function(response){
+        if (response.ok) {
+          return response.json();
+        } else {
+          return Promise.reject(new Error('error request'));
+        }
+      }).then(function(json){
+        nodes = nodes.concat(json);
+      }).catch(function(e){
+        console.log(e.message);
+      })
     })
   ])
 }

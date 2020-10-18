@@ -109,7 +109,8 @@ export class ForceSimulationGraphCanvas{
 
     this.update();
     this.forceSimulation.restart();
-    this.forceSimulation.alpha(1);
+    this.forceSimulation.alpha(0);
+    this.render();
   }
 
   remove(forceSimulation, transform, graphData){
